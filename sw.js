@@ -1,10 +1,7 @@
-const CACHE_NAME = 'meu-exame-v04';
+from pathlib import Path
 
-const FILES = [
-  './',
-  './index.html',
-  './manifest.json'
-];
+sw = """const CACHE_NAME='meu-exame-v05';
+const FILES=['./','./index.html','./manifest.json'];
 
 self.addEventListener('install', event => {
   self.skipWaiting();
@@ -16,13 +13,9 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys =>
-        Promise.all(
-          keys
-            .filter(key => key !== CACHE_NAME)
-            .map(key => caches.delete(key))
-        )
-      )
+      .then(keys => Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      ))
       .then(() => self.clients.claim())
   );
 });
@@ -34,13 +27,14 @@ self.addEventListener('fetch', event => {
     fetch(event.request)
       .then(response => {
         const copy = response.clone();
-
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, copy);
-        });
-
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
         return response;
       })
       .catch(() => caches.match(event.request))
   );
 });
+"""
+
+path = Path("/mnt/data/sw.js")
+path.write_text(sw, encoding="utf-8")
+print(path)
