@@ -1,0 +1,10 @@
+{
+  "name": "ConfessReady",
+  "short_name": "ConfessReady",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffdf8",
+  "theme_color": "#f6f2e8",
+  "description": "Exame de consciência e preparação para a confissão."
+}
